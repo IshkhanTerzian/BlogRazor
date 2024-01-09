@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogRazor.Web.Migrations
 {
     [DbContext(typeof(BlogRazorDbContext))]
-    [Migration("20240109143104_Initial Migration")]
-    partial class InitialMigration
+    [Migration("20240109233248_Initial upload")]
+    partial class Initialupload
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,10 +39,6 @@ namespace BlogRazor.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FeaturedImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Heading")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -58,34 +54,12 @@ namespace BlogRazor.Web.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UrlHandle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("Visible")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
                     b.ToTable("BlogPosts");
-                });
-
-            modelBuilder.Entity("BlogRazor.Web.Models.Domain.Tag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BlogPostId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tags");
                 });
 #pragma warning restore 612, 618
         }

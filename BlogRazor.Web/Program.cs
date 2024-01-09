@@ -1,13 +1,19 @@
 using BlogRazor.Web.Data;
+using BlogRazor.Web.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddControllers();
+
 builder.Services.AddDbContext<BlogRazorDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("BlogRazorConnectionString")));
+
+builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+
 
 var app = builder.Build();
 
@@ -27,5 +33,6 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapControllers();
 
 app.Run();

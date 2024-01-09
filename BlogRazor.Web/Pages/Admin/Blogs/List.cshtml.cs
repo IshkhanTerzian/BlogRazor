@@ -1,25 +1,36 @@
 using BlogRazor.Web.Data;
 using BlogRazor.Web.Models.Domain;
+using BlogRazor.Web.Models.ViewModels;
+using BlogRazor.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace BlogRazor.Web.Pages.Admin.Blogs
-{
-    public class ListModel : PageModel
     {
+    public class ListModel : PageModel
+        {
 
-        private readonly BlogRazorDbContext _blogRazorDbContext;
+        private readonly IBlogPostRepository blogPostRepository;
 
         public List<BlogPost> BlogPosts { get; set; }
 
-        public ListModel(BlogRazorDbContext blogRazorDbContext)
-        {
-            this._blogRazorDbContext = blogRazorDbContext;
-        }
+        public ListModel(IBlogPostRepository blogPostRepository)
+            {
+            this.blogPostRepository = blogPostRepository;
+            }
 
-        public void OnGet()
-        {
-            BlogPosts = _blogRazorDbContext.BlogPosts.ToList();
+        public async Task OnGet()
+            {
+            var notificationJson = (string)TempData["Notification"];
+
+            if (notificationJson != null)
+                {
+                ViewData["Notification"] = JsonSerializer.Deserialize<Notification>(notificationJson);
+                }
+
+            BlogPosts = (await blogPostRepository.GetAllAsync())?.ToList();
+            }
         }
     }
-}

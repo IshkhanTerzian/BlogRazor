@@ -1,61 +1,72 @@
 using BlogRazor.Web.Data;
+using BlogRazor.Web.Enums;
 using BlogRazor.Web.Models.Domain;
+using BlogRazor.Web.Models.ViewModels;
+using BlogRazor.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Text.Json;
 
 namespace BlogRazor.Web.Pages.Admin.Blogs
     {
     public class EditModel : PageModel
         {
-        private readonly BlogRazorDbContext _blogRazorDbContext;
+        private readonly IBlogPostRepository blogPostRepository;
 
         [BindProperty]
         public BlogPost BlogPost { get; set; }
 
-        public EditModel(BlogRazorDbContext blogRazorDbContext)
+
+        public EditModel(IBlogPostRepository blogPostRepository)
             {
-            this._blogRazorDbContext = blogRazorDbContext;
+            this.blogPostRepository = blogPostRepository;
             }
 
-        public void OnGet(Guid id)
+        public async Task OnGet(Guid id)
             {
-            BlogPost = _blogRazorDbContext.BlogPosts.Find(id);
+            BlogPost = await blogPostRepository.GetAsync(id);
             }
 
-        public IActionResult OnPostEdit()
+        public async Task<IActionResult> OnPostEdit()
             {
-            var existingBlogPost = _blogRazorDbContext.BlogPosts.Find(BlogPost.Id);
-
-            if (existingBlogPost != null)
+            try
                 {
-                existingBlogPost.Heading = BlogPost.Heading;
-                existingBlogPost.PageTitle = BlogPost.PageTitle;
-                existingBlogPost.Content = BlogPost.Content;
-                existingBlogPost.ShortDescription = BlogPost.ShortDescription;
-                existingBlogPost.FeaturedImageUrl = BlogPost.FeaturedImageUrl;
-                existingBlogPost.UrlHandle = BlogPost.UrlHandle;
-                existingBlogPost.PublishedDate = BlogPost.PublishedDate;
-                existingBlogPost.Author = BlogPost.Author;
-                existingBlogPost.Visible = BlogPost.Visible;
+                await blogPostRepository.UpdateAsync(BlogPost);
+
+                ViewData["Notification"] = new Notification
+                    {
+                    Message = "Record updated succesfully",
+                    Type = Enums.NotificationType.Success
+                    };
+                }
+            catch (Exception ex)
+                {
+                ViewData["Notification"] = new Notification
+                    {
+                    Message = "Something went wrong.",
+                    Type = Enums.NotificationType.Error
+                    };
                 }
 
-            _blogRazorDbContext.SaveChanges();
-            return RedirectToPage("/Admin/Blogs/List");
+            return Page();
             }
 
-        public IActionResult OnPostDelete()
+        public async Task<IActionResult> OnPostDelete()
             {
 
-            var existingBlog = _blogRazorDbContext.BlogPosts.Find(BlogPost.Id);
+            var deleted = await blogPostRepository.DeleteAsync(BlogPost.Id);
 
-            if (existingBlog != null)
+            if (deleted)
                 {
-                _blogRazorDbContext.BlogPosts.Remove(existingBlog);
-                _blogRazorDbContext.SaveChanges();
+                var notification = new Notification
+                    {
+                    Message = "Blog post deleted succesfully",
+                    Type = Enums.NotificationType.Success
+                    };
+
+                TempData["Notification"] = JsonSerializer.Serialize(notification);
                 return RedirectToPage("/Admin/Blogs/List");
-
                 }
-
             return Page();
             }
         }

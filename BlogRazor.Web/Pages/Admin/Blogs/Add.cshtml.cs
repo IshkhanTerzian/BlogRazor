@@ -1,23 +1,24 @@
 using BlogRazor.Web.Data;
 using BlogRazor.Web.Models.Domain;
 using BlogRazor.Web.Models.ViewModels;
+using BlogRazor.Web.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Text.Json;
 
 namespace BlogRazor.Web.Pages.Admin.Blogs
     {
     public class AddModel : PageModel
         {
 
-        private readonly BlogRazorDbContext _blogRazorDbContext;
+        private readonly IBlogPostRepository blogPostRepository;
 
         [BindProperty]
         public AddBlogPost AddBlogPostRequest { get; set; }
-
-
-        public AddModel(BlogRazorDbContext blogRazorDbContext)
+     
+        public AddModel(IBlogPostRepository blogPostRepository)
             {
-            this._blogRazorDbContext = blogRazorDbContext;
+            this.blogPostRepository = blogPostRepository;
             }
 
         public void OnGet()
@@ -25,7 +26,7 @@ namespace BlogRazor.Web.Pages.Admin.Blogs
 
             }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
             {
             var blogPost = new BlogPost()
                 {
@@ -33,15 +34,20 @@ namespace BlogRazor.Web.Pages.Admin.Blogs
                 PageTitle = AddBlogPostRequest.PageTitle,
                 Content = AddBlogPostRequest.Content,
                 ShortDescription = AddBlogPostRequest.ShortDescription,
-                FeaturedImageUrl = AddBlogPostRequest.FeaturedImageUrl,
                 PublishedDate = AddBlogPostRequest.PublishedDate,
-                UrlHandle = AddBlogPostRequest.UrlHandle,
                 Author = AddBlogPostRequest.Author,
                 Visible = AddBlogPostRequest.Visible
                 };
 
-            _blogRazorDbContext.BlogPosts.Add(blogPost);
-            _blogRazorDbContext.SaveChanges();
+            await blogPostRepository.AddAsync(blogPost);
+
+            var notification = new Notification
+                {
+                Message = "Blog post created succesfully",
+                Type = Enums.NotificationType.Success
+                };
+
+            TempData["Notification"] = JsonSerializer.Serialize(notification);
 
             return RedirectToPage("/Admin/Blogs/List");
             }
