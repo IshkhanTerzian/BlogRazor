@@ -35,13 +35,19 @@ namespace BlogRazor.Web.Pages
 
             if (identityResult.Succeeded)
                 {
-                ViewData["Notification"] = new Notification
-                    {
-                    Type = Enums.NotificationType.Success,
-                    Message = "User registered succesfully."
-                    };
 
-                return Page();
+                var addRolesResult = await userManager.AddToRoleAsync(user, "User");
+
+                if (addRolesResult.Succeeded)
+                    {
+                    ViewData["Notification"] = new Notification
+                        {
+                        Type = Enums.NotificationType.Success,
+                        Message = "User registered succesfully."
+                        };
+
+                    return Page();
+                    }
                 }
 
             ViewData["Notification"] = new Notification

@@ -3,12 +3,15 @@ using BlogRazor.Web.Enums;
 using BlogRazor.Web.Models.Domain;
 using BlogRazor.Web.Models.ViewModels;
 using BlogRazor.Web.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Json;
 
 namespace BlogRazor.Web.Pages.Admin.Blogs
     {
+
+    [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
         {
         private readonly IBlogPostRepository blogPostRepository;

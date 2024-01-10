@@ -2,6 +2,7 @@ using BlogRazor.Web.Data;
 using BlogRazor.Web.Models.Domain;
 using BlogRazor.Web.Models.ViewModels;
 using BlogRazor.Web.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,8 @@ using System.Text.Json;
 
 namespace BlogRazor.Web.Pages.Admin.Blogs
     {
+
+    [Authorize(Roles = "Admin")]
     public class ListModel : PageModel
         {
 

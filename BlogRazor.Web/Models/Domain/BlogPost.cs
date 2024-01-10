@@ -11,5 +11,7 @@
         public bool Visible { get; set; }
         public DateTime PublishedDate { get; set; }
 
+        public ICollection<BlogPostLike> Likes { get; set; }
+
         }
     }
