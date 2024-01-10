@@ -1,52 +1,17 @@
-using BlogRazor.Web.Models.Domain;
-using BlogRazor.Web.Repositories;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using BlogRazor.Web.Models.Domain;using BlogRazor.Web.Models.ViewModels;using BlogRazor.Web.Repositories;using Microsoft.AspNetCore.Identity;using Microsoft.AspNetCore.Mvc;using Microsoft.AspNetCore.Mvc.RazorPages;namespace BlogRazor.Web.Pages.Blog    {    public class DetailsModel : PageModel        {        private readonly IBlogPostRepository blogPostRepository;        private readonly IBlogPostLikeRepository blogPostLikeRepository;        private readonly IBlogPostCommentRepository blogPostCommentRepository;        private readonly SignInManager<IdentityUser> signInManager;        private readonly UserManager<IdentityUser> userManager;        public BlogPost BlogPost { get; set; }        public int TotalLikes { get; set; }        public bool Liked { get; set; }        [BindProperty]        public Guid BlogPostId { get; set; }        [BindProperty]        public string CommentDescription { get; set; }        public List<BlogComment> Comments { get; set; }        public DetailsModel(IBlogPostRepository blogPostRepository, IBlogPostLikeRepository blogPostLikeRepository, IBlogPostCommentRepository blogPostCommentRepository,            SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)            {            this.blogPostRepository = blogPostRepository;            this.blogPostLikeRepository = blogPostLikeRepository;            this.blogPostCommentRepository = blogPostCommentRepository;            this.signInManager = signInManager;            this.userManager = userManager;            }        public async Task<IActionResult> OnGet(string heading)            {            BlogPost = await blogPostRepository.GetAsync(heading);            if (BlogPost != null)                {                BlogPostId = BlogPost.Id;                if (signInManager.IsSignedIn(User))                    {                    var likes = await blogPostLikeRepository.GetLikesForBlog(BlogPost.Id);                    var userId = userManager.GetUserId(User);                    Liked = likes.Any(x => x.UserId == Guid.Parse(userId));                    await GetComments();                    }                TotalLikes = await blogPostLikeRepository.GetTotalLikesForBlog(BlogPost.Id);                }            return Page();            }        public async Task<IActionResult> OnPost(string heading)            {            if (signInManager.IsSignedIn(User) && !string.IsNullOrWhiteSpace(CommentDescription))                {                var userId = userManager.GetUserId(User);                var comment = new BlogPostComment                    {                    BlogPostId = BlogPostId,                    Description = CommentDescription,                    DateAdded = DateTime.Now,                    UserId = Guid.Parse(userId)                    };                await blogPostCommentRepository.AddAsync(comment);                }            return RedirectToPage("/Blog/Details", new { heading = heading });            }        private async Task GetComments()
+            {
+            var blogPostComments = await blogPostCommentRepository.GetAllAsync(BlogPost.Id);
+            var blogComments = new List<BlogComment>();
 
-namespace BlogRazor.Web.Pages.Blog
-{
-    public class DetailsModel : PageModel
-    {
-        private readonly IBlogPostRepository blogPostRepository;
-        private readonly IBlogPostLikeRepository blogPostLikeRepository;
-        private readonly SignInManager<IdentityUser> signInManager;
-        private readonly UserManager<IdentityUser> userManager;
-
-        public BlogPost BlogPost { get; set; }
-
-        public int TotalLikes { get; set; }
-
-        public bool Liked { get; set; }
-
-        public DetailsModel(IBlogPostRepository blogPostRepository, IBlogPostLikeRepository blogPostLikeRepository, 
-            SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
-        {
-            this.blogPostRepository = blogPostRepository;
-            this.blogPostLikeRepository = blogPostLikeRepository;
-            this.signInManager = signInManager;
-            this.userManager = userManager;
-            }
-
-        public async Task<IActionResult> OnGet(string heading)
-        {
-           BlogPost = await blogPostRepository.GetAsync(heading);
-            
-            if (BlogPost != null)
+            foreach (var blogPostComment in blogPostComments)
                 {
-                   if (signInManager.IsSignedIn(User))
+                blogComments.Add(new BlogComment
                     {
-                    var likes = await blogPostLikeRepository.GetLikesForBlog(BlogPost.Id);
-
-                    var userId = userManager.GetUserId(User);
-
-                     Liked = likes.Any(x => x.UserId == Guid.Parse(userId));
-                    }
-
-                TotalLikes = await blogPostLikeRepository.GetTotalLikesForBlog(BlogPost.Id);
+                    DateAdded = blogPostComment.DateAdded,
+                    Description = blogPostComment.Description,
+                    Username = (await userManager.FindByIdAsync(blogPostComment.UserId.ToString())).UserName
+                    });
                 }
 
-           return Page();
-        }
-    }
-}
+            Comments = blogComments;
+            }        }    }

@@ -4,6 +4,7 @@ using BlogRazor.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogRazor.Web.Migrations
 {
     [DbContext(typeof(BlogRazorDbContext))]
-    partial class BlogRazorDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240110184809_Adding Blog comments table")]
+    partial class AddingBlogcommentstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
