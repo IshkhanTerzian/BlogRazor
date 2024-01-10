@@ -5,7 +5,7 @@ namespace BlogRazor.Web.Data
     {
     public class BlogRazorDbContext : DbContext
         {
-        public BlogRazorDbContext(DbContextOptions options) : base(options)
+        public BlogRazorDbContext(DbContextOptions<BlogRazorDbContext> options) : base(options)
             {
 
             }
