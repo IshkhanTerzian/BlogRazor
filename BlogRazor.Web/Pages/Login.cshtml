@@ -14,12 +14,14 @@
                 <form method="post">
                     <div class="mb-3">
                         <label class="col-form-label">Username</label>
-                        <input type="text" class="form-control" asp-for="Login.Username" />
+                        <input type="text" class="form-control" asp-for="Login.Username" required />
+                        <span class="text-danger" asp-validation-for="Login.Username"></span>
                     </div>
 
                     <div class="mb-3">
                         <label class="col-form-label">Password</label>
-                        <input type="password" class="form-control" asp-for="Login.Password" />
+                        <input type="password" class="form-control" asp-for="Login.Password" required />
+                        <span class="text-danger" asp-validation-for="Login.Password"></span>
                     </div>
 
                     <div class="mb-3">

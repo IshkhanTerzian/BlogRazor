@@ -21,28 +21,32 @@ namespace BlogRazor.Web.Pages
             {
             }
 
-        public async Task<IActionResult> OnPost(string ReturnUrl)
+        public async Task<IActionResult> OnPost(string? ReturnUrl)
             {
-            var signInResult = await signInManager.PasswordSignInAsync(Login.Username, Login.Password, false, false);
-
-            if (signInResult.Succeeded)
+            if (ModelState.IsValid)
                 {
-                if (!string.IsNullOrWhiteSpace(ReturnUrl))
-                    {
-                    return RedirectToPage(ReturnUrl);
+                var signInResult = await signInManager.PasswordSignInAsync(Login.Username, Login.Password, false, false);
 
+                if (signInResult.Succeeded)
+                    {
+                    if (!string.IsNullOrWhiteSpace(ReturnUrl))
+                        {
+                        return RedirectToPage(ReturnUrl);
+
+                        }
+                    return RedirectToPage("Index");
                     }
-                return RedirectToPage("Index");
-                }
-            else
-                {
-                ViewData["Notification"] = new Notification
+                else
                     {
-                    Type = Enums.NotificationType.Error,
-                    Message = "Unable to Login"
-                    };
-                return Page();
+                    ViewData["Notification"] = new Notification
+                        {
+                        Type = Enums.NotificationType.Error,
+                        Message = "Unable to Login"
+                        };
+                    return Page();
+                    }
                 }
+            return Page();
             }
         }
     }

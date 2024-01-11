@@ -2,8 +2,11 @@
 
 namespace BlogRazor.Web.Models.ViewModels
     {
-    public class AddBlogPost
+    public class EditBlogPostRequest
         {
+
+        [Required]
+        public Guid Id { get; set; }
 
         [Required]
         public string Heading { get; set; }
@@ -21,9 +24,9 @@ namespace BlogRazor.Web.Models.ViewModels
         public string Author { get; set; }
 
         [Required]
-        public DateTime PublishedDate { get; set; }
-
         public bool Visible { get; set; }
 
+        [Required]
+        public DateTime PublishedDate { get; set; }
         }
     }

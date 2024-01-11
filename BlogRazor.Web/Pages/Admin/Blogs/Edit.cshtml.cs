@@ -17,7 +17,7 @@ namespace BlogRazor.Web.Pages.Admin.Blogs
         private readonly IBlogPostRepository blogPostRepository;
 
         [BindProperty]
-        public BlogPost BlogPost { get; set; }
+        public EditBlogPostRequest BlogPost { get; set; }
 
 
         public EditModel(IBlogPostRepository blogPostRepository)
@@ -27,30 +27,63 @@ namespace BlogRazor.Web.Pages.Admin.Blogs
 
         public async Task OnGet(Guid id)
             {
-            BlogPost = await blogPostRepository.GetAsync(id);
+            var blogPostModel = await blogPostRepository.GetAsync(id);
+
+            if (blogPostModel != null)
+                {
+                BlogPost = new EditBlogPostRequest
+                    {
+                    Id = blogPostModel.Id,
+                    Heading = blogPostModel.Heading,
+                    PageTitle = blogPostModel.PageTitle,
+                    Content = blogPostModel.Content,
+                    ShortDescription = blogPostModel.ShortDescription,
+                    Author = blogPostModel.Author,
+                    Visible = blogPostModel.Visible,
+                    PublishedDate = blogPostModel.PublishedDate
+                    };
+                }
             }
 
         public async Task<IActionResult> OnPostEdit()
             {
-            try
+            if (ModelState.IsValid)
                 {
-                await blogPostRepository.UpdateAsync(BlogPost);
-
-                ViewData["Notification"] = new Notification
+                try
                     {
-                    Message = "Record updated succesfully",
-                    Type = Enums.NotificationType.Success
-                    };
-                }
-            catch (Exception ex)
-                {
-                ViewData["Notification"] = new Notification
-                    {
-                    Message = "Something went wrong.",
-                    Type = Enums.NotificationType.Error
-                    };
-                }
 
+                    var blogPostModel = new BlogPost
+                        {
+                        Id = BlogPost.Id,
+                        Heading = BlogPost.Heading,
+                        PageTitle = BlogPost.PageTitle,
+                        Content = BlogPost.Content,
+                        ShortDescription = BlogPost.ShortDescription,
+                        Author = BlogPost.Author,
+                        Visible = BlogPost.Visible,
+                        PublishedDate = BlogPost.PublishedDate
+                        };
+
+                    await blogPostRepository.UpdateAsync(blogPostModel);
+
+                    var notification = new Notification
+                        {
+                        Message = "Blog post updated succesfully",
+                        Type = Enums.NotificationType.Success
+                        };
+
+                    TempData["Notification"] = JsonSerializer.Serialize(notification);
+                    return RedirectToPage("/Admin/Blogs/List");
+                    }
+                catch (Exception ex)
+                    {
+                    ViewData["Notification"] = new Notification
+                        {
+                        Message = "Something went wrong.",
+                        Type = Enums.NotificationType.Error
+                        };
+                    }
+                }
             return Page();
             }
 

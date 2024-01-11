@@ -17,7 +17,7 @@ namespace BlogRazor.Web.Pages.Admin.Blogs
 
         [BindProperty]
         public AddBlogPost AddBlogPostRequest { get; set; }
-     
+
         public AddModel(IBlogPostRepository blogPostRepository)
             {
             this.blogPostRepository = blogPostRepository;
@@ -30,28 +30,33 @@ namespace BlogRazor.Web.Pages.Admin.Blogs
 
         public async Task<IActionResult> OnPost()
             {
-            var blogPost = new BlogPost()
+
+            if (ModelState.IsValid)
                 {
-                Heading = AddBlogPostRequest.Heading,
-                PageTitle = AddBlogPostRequest.PageTitle,
-                Content = AddBlogPostRequest.Content,
-                ShortDescription = AddBlogPostRequest.ShortDescription,
-                PublishedDate = AddBlogPostRequest.PublishedDate,
-                Author = AddBlogPostRequest.Author,
-                Visible = AddBlogPostRequest.Visible
-                };
+                var blogPost = new BlogPost()
+                    {
+                    Heading = AddBlogPostRequest.Heading,
+                    PageTitle = AddBlogPostRequest.PageTitle,
+                    Content = AddBlogPostRequest.Content,
+                    ShortDescription = AddBlogPostRequest.ShortDescription,
+                    PublishedDate = AddBlogPostRequest.PublishedDate,
+                    Author = AddBlogPostRequest.Author,
+                    Visible = AddBlogPostRequest.Visible
+                    };
 
-            await blogPostRepository.AddAsync(blogPost);
+                await blogPostRepository.AddAsync(blogPost);
 
-            var notification = new Notification
-                {
-                Message = "Blog post created succesfully",
-                Type = Enums.NotificationType.Success
-                };
+                var notification = new Notification
+                    {
+                    Message = "Blog post created succesfully",
+                    Type = Enums.NotificationType.Success
+                    };
 
-            TempData["Notification"] = JsonSerializer.Serialize(notification);
+                TempData["Notification"] = JsonSerializer.Serialize(notification);
 
-            return RedirectToPage("/Admin/Blogs/List");
+                return RedirectToPage("/Admin/Blogs/List");
+                }
+            return Page();
             }
         }
     }
