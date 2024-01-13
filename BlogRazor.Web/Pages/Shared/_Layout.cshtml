@@ -30,38 +30,38 @@
                         </li>
 
                         @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
-                            {
-                             <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                               aria-expanded="false" id="navbarDropdownAdmin">
-                                Admin
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
-                                <li class="dropdown-item">
-                                    <a class="dropdown-item" href="/admin/blogs/add">Add Blog Post</a>
-                                </li>
-                                 <li class="dropdown-item">
-                                    <a class="dropdown-item" href="/admin/blogs/list">View Blog Posts</a>
-                                </li>
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                   aria-expanded="false" id="navbarDropdownAdmin">
+                                    Admin
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
+                                    <li class="dropdown-item">
+                                        <a class="dropdown-item" href="/admin/blogs/add">Add Blog Post</a>
+                                    </li>
+                                    <li class="dropdown-item">
+                                        <a class="dropdown-item" href="/admin/blogs/list">View Blog Posts</a>
+                                    </li>
                                     <li class="dropdown-item">
                                         <a class="dropdown-item" href="/admin/users/index">View Users</a>
                                     </li>
-                            </ul>
-                        </li>
-                            }
+                                </ul>
+                            </li>
+                        }
                     </ul>
                     <div class="d-flex align-items-center">
                         @if (signInManager.IsSignedIn(User))
-                            {
-                                <div class="me-3 text-light"> 
-                                    @User?.Identity?.Name
-                                </div>
+                        {
+                            <div class="me-3 text-light">
+                                @User?.Identity?.Name
+                            </div>
                             <a href="/logout" class="btn bg-light text-dark me-3">Logout</a>
-                            } else
-                            {
+                        } else
+                        {
                             <a href="/login" class="btn bg-light text-dark me-3">Login</a>
                             <a href="/register" class="btn bg-light text-dark me-3">Register</a>
-                            }
+                        }
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 -BlogAndSee - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2024 -BlogAndSee
         </div>
     </footer>
 
@@ -81,6 +81,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-    @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts",required: false)
 </body>
 </html>

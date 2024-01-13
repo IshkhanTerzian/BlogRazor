@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace BlogRazor.Web.Models.ViewModels
-    {
+{
     public class AddBlogPost
-        {
+    {
 
         [Required]
         public string Heading { get; set; }
@@ -25,5 +25,5 @@ namespace BlogRazor.Web.Models.ViewModels
 
         public bool Visible { get; set; }
 
-        }
     }
+}

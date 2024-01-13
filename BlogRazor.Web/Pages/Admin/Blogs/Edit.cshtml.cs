@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Json;
 
 namespace BlogRazor.Web.Pages.Admin.Blogs
-    {
+{
 
     [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
-        {
+    {
         private readonly IBlogPostRepository blogPostRepository;
 
         [BindProperty]
@@ -21,18 +21,18 @@ namespace BlogRazor.Web.Pages.Admin.Blogs
 
 
         public EditModel(IBlogPostRepository blogPostRepository)
-            {
+        {
             this.blogPostRepository = blogPostRepository;
-            }
+        }
 
         public async Task OnGet(Guid id)
-            {
+        {
             var blogPostModel = await blogPostRepository.GetAsync(id);
 
             if (blogPostModel != null)
-                {
+            {
                 BlogPost = new EditBlogPostRequest
-                    {
+                {
                     Id = blogPostModel.Id,
                     Heading = blogPostModel.Heading,
                     PageTitle = blogPostModel.PageTitle,
@@ -41,19 +41,19 @@ namespace BlogRazor.Web.Pages.Admin.Blogs
                     Author = blogPostModel.Author,
                     Visible = blogPostModel.Visible,
                     PublishedDate = blogPostModel.PublishedDate
-                    };
-                }
+                };
             }
+        }
 
         public async Task<IActionResult> OnPostEdit()
-            {
+        {
             if (ModelState.IsValid)
-                {
+            {
                 try
-                    {
+                {
 
                     var blogPostModel = new BlogPost
-                        {
+                    {
                         Id = BlogPost.Id,
                         Heading = BlogPost.Heading,
                         PageTitle = BlogPost.PageTitle,
@@ -62,48 +62,47 @@ namespace BlogRazor.Web.Pages.Admin.Blogs
                         Author = BlogPost.Author,
                         Visible = BlogPost.Visible,
                         PublishedDate = BlogPost.PublishedDate
-                        };
+                    };
 
                     await blogPostRepository.UpdateAsync(blogPostModel);
 
                     var notification = new Notification
-                        {
+                    {
                         Message = "Blog post updated succesfully",
                         Type = Enums.NotificationType.Success
-                        };
+                    };
 
                     TempData["Notification"] = JsonSerializer.Serialize(notification);
                     return RedirectToPage("/Admin/Blogs/List");
-                    }
-                catch (Exception ex)
-                    {
+                } catch (Exception ex)
+                {
                     ViewData["Notification"] = new Notification
-                        {
+                    {
                         Message = "Something went wrong.",
                         Type = Enums.NotificationType.Error
-                        };
-                    }
+                    };
                 }
-            return Page();
             }
+            return Page();
+        }
 
         public async Task<IActionResult> OnPostDelete()
-            {
+        {
 
             var deleted = await blogPostRepository.DeleteAsync(BlogPost.Id);
 
             if (deleted)
-                {
+            {
                 var notification = new Notification
-                    {
+                {
                     Message = "Blog post deleted succesfully",
                     Type = Enums.NotificationType.Success
-                    };
+                };
 
                 TempData["Notification"] = JsonSerializer.Serialize(notification);
                 return RedirectToPage("/Admin/Blogs/List");
-                }
-            return Page();
             }
+            return Page();
         }
     }
+}

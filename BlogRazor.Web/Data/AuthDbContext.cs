@@ -3,15 +3,15 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogRazor.Web.Data
-    {
+{
     public class AuthDbContext : IdentityDbContext
-        {
+    {
         public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
-            {
-            }
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
-            {
+        {
             base.OnModelCreating(builder);
 
             var superAdminRoleId = "73fac54b-477c-4592-91cc-3379798e6bec";
@@ -48,15 +48,15 @@ namespace BlogRazor.Web.Data
             var superAdminId = "de0b87d9-f234-4f85-875c-1816f73563ff";
 
             var superAdminUser = new IdentityUser()
-                {
+            {
                 Id = superAdminId,
                 UserName = "superadmin@test.com",
                 Email = "superadmin@test.com",
                 NormalizedEmail = "superadmin@test.com".ToUpper(),
                 NormalizedUserName = "superadmin@test.com".ToUpper()
-                };
+            };
 
-            superAdminUser.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(superAdminUser, "superadmin123");
+            superAdminUser.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(superAdminUser,"superadmin123");
 
             builder.Entity<IdentityUser>().HasData(superAdminUser);
 
@@ -81,6 +81,6 @@ namespace BlogRazor.Web.Data
 
             builder.Entity<IdentityUserRole<string>>().HasData(superAdminRoles);
 
-            }
         }
     }
+}

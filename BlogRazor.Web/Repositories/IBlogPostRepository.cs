@@ -1,9 +1,9 @@
 ﻿using BlogRazor.Web.Models.Domain;
 
 namespace BlogRazor.Web.Repositories
-    {
+{
     public interface IBlogPostRepository
-        {
+    {
         Task<IEnumerable<BlogPost>> GetAllAsync();
 
         Task<BlogPost> GetAsync(Guid id);
@@ -15,5 +15,5 @@ namespace BlogRazor.Web.Repositories
         Task<BlogPost> UpdateAsync(BlogPost blogPost);
 
         Task<bool> DeleteAsync(Guid id);
-        }
     }
+}

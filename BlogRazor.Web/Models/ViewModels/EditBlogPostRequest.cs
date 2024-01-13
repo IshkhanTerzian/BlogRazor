@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace BlogRazor.Web.Models.ViewModels
-    {
+{
     public class EditBlogPostRequest
-        {
+    {
 
         [Required]
         public Guid Id { get; set; }
@@ -28,5 +28,5 @@ namespace BlogRazor.Web.Models.ViewModels
 
         [Required]
         public DateTime PublishedDate { get; set; }
-        }
     }
+}

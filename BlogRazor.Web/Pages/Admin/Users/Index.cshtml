@@ -32,7 +32,7 @@
                 </thead>
                 <tbody>
                     @foreach (var user in Model.Users)
-                        {
+                    {
                         <tr>
                             <td>@user.Id</td>
                             <td>@user.Username</td>
@@ -43,10 +43,10 @@
                                 </a>
                             </td>
                         </tr>
-                        }
+                    }
                 </tbody>
             </table>
-            <input type="hidden" asp-for="SelectedUserId" id="selectedUserId"/>
+            <input type="hidden" asp-for="SelectedUserId" id="selectedUserId" />
         </form>
     </div>
 </div>
@@ -86,14 +86,14 @@
                         </div>
 
                         @if (User.IsInRole("SuperAdmin"))
-                            {
+                        {
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="Admin" asp-for="AddUserRequest.AdminCheckbox">
                                 <label class="form-check-label" for="defaultCheck2">
                                     Admin Role
                                 </label>
                             </div>
-                            }
+                        }
                     </div>
                 </div>
                 <div class="modal-footer">

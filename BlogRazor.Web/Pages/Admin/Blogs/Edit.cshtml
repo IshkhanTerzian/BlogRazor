@@ -12,7 +12,7 @@
 <partial name="_Notification">
 
     @if (Model.BlogPost != null)
-        {
+    {
         <div>
             <div class="container">
                 <form method="post">
@@ -24,13 +24,13 @@
 
                     <div class="mb-3">
                         <label for="heading" class="form-label">Heading</label>
-                        <input type="text" class="form-control" id="heading" asp-for="BlogPost.Heading" required >
+                        <input type="text" class="form-control" id="heading" asp-for="BlogPost.Heading" required>
                         <span class="text-danger" asp-validation-for="BlogPost.Heading"></span>
                     </div>
 
                     <div class="mb-3">
                         <label for="PageTitle" class="form-label">Page Title</label>
-                        <input type="text" class="form-control" id="PageTitle" asp-for="BlogPost.PageTitle" required >
+                        <input type="text" class="form-control" id="PageTitle" asp-for="BlogPost.PageTitle" required>
                         <span class="text-danger" asp-validation-for="BlogPost.PageTitle"></span>
                     </div>
 
@@ -72,13 +72,12 @@
                 </form>
             </div>
         </div>
-        }
-    else
-        {
+    } else
+    {
         <div class="container">
             <p>Blog Post not Found!</p>
         </div>
-        }
+    }
 
     @section Scripts {
         <script>

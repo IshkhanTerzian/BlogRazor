@@ -2,13 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogRazor.Web.Data
-    {
+{
     public class BlogRazorDbContext : DbContext
-        {
+    {
         public BlogRazorDbContext(DbContextOptions<BlogRazorDbContext> options) : base(options)
-            {
+        {
 
-            }
+        }
 
 
         public DbSet<BlogPost> BlogPosts { get; set; }
@@ -16,5 +16,5 @@ namespace BlogRazor.Web.Data
         public DbSet<BlogPostLike> BlogPostLike { get; set; }
 
         public DbSet<BlogPostComment> BlogPostComment { get; set; }
-        }
     }
+}

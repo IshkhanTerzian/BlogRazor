@@ -11,7 +11,7 @@ namespace BlogRazor.Web.Pages
         public LogoutModel(SignInManager<IdentityUser> signInManager)
         {
             this.signInManager = signInManager;
-            }
+        }
         public async Task<IActionResult> OnGet()
         {
             await signInManager.SignOutAsync();

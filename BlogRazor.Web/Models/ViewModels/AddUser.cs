@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace BlogRazor.Web.Models.ViewModels
-    {
+{
     public class AddUser
-        {
+    {
         [Required]
         public string Username { get; set; }
 
@@ -17,4 +17,4 @@ namespace BlogRazor.Web.Models.ViewModels
 
         public bool AdminCheckbox { get; set; }
     }
-    }
+}
