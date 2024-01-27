@@ -26,7 +26,7 @@ Before you begin, ensure you have the following prerequisites installed on your 
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/ishkhanterzian/BlogRazor.Web.git
+   git clone https://github.com/IshkhanTerzian/BlogRazor.Web.git
 
 ## Project Structure
 
